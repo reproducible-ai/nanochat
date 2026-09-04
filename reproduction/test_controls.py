@@ -8,7 +8,7 @@ def main() -> None:
     fast_projection = project_pretrain_seconds([9000, 3000, 3000, 3000])
     enforce_projection_ceiling(fast_projection)
 
-    slow_projection = project_pretrain_seconds([9000, 5000, 5000, 5000])
+    slow_projection = project_pretrain_seconds([9000, 5100, 5100, 5100])
     try:
         enforce_projection_ceiling(slow_projection)
     except RuntimeError:

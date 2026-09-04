@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Measure depth-16 steady-state time and fail if the full pretrain is too long."""
+"""Measure depth-14 steady-state time and fail if the full pretrain is too long."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ from pathlib import Path
 
 
 BASE_DIR = Path("outputs/nanochat")
-LOG_PATH = Path("outputs/calibration-depth16.log")
-FULL_ITERATIONS = 3584
+LOG_PATH = Path("outputs/calibration-depth14.log")
+FULL_ITERATIONS = 2506
 MAX_PROJECTED_PRETRAIN_SECONDS = 3.5 * 60 * 60
 
 
@@ -38,12 +38,12 @@ def main() -> int:
         sys.executable,
         "-m",
         "scripts.base_train",
-        "--depth=16",
+        "--depth=14",
         "--target-param-data-ratio=8",
         "--device-batch-size=32",
         "--fp8",
         "--num-iterations=5",
-        "--model-tag=calibration-depth16",
+        "--model-tag=calibration-depth14",
         "--core-metric-every=-1",
         "--eval-every=-1",
         "--sample-every=-1",
@@ -68,19 +68,19 @@ def main() -> int:
         print(log_text)
     projected_seconds = project_pretrain_seconds(step_ms)
     steady_ms = statistics.median(step_ms[-3:])
-    checkpoint_dir = BASE_DIR / "base_checkpoints" / "calibration-depth16"
+    checkpoint_dir = BASE_DIR / "base_checkpoints" / "calibration-depth14"
     if not list(checkpoint_dir.glob("model_*.pt")):
         raise RuntimeError("calibration produced no model checkpoint")
 
     result = {
-        "depth": 16,
+        "depth": 14,
         "full_iterations": FULL_ITERATIONS,
         "measured_step_ms": step_ms,
         "steady_step_ms": steady_ms,
         "projected_pretrain_seconds": projected_seconds,
         "maximum_projected_pretrain_seconds": MAX_PROJECTED_PRETRAIN_SECONDS,
     }
-    Path("outputs/calibration-depth16.json").write_text(
+    Path("outputs/calibration-depth14.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
     )
     print(json.dumps(result, sort_keys=True))

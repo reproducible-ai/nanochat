@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the final depth-16 checkpoint and tokenizer as one artifact."""
+"""Package the final depth-14 checkpoint and tokenizer as one artifact."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ from pathlib import Path
 
 
 BASE_DIR = Path("outputs/nanochat")
-ARCHIVE = Path("outputs/nanochat-depth16.tar.gz")
+ARCHIVE = Path("outputs/nanochat-depth14.tar.gz")
 
 
 def main() -> None:
-    checkpoint_dir = BASE_DIR / "chatsft_checkpoints" / "depth16"
+    checkpoint_dir = BASE_DIR / "chatsft_checkpoints" / "depth14"
     model_files = sorted(checkpoint_dir.glob("model_*.pt"))
     meta_files = sorted(checkpoint_dir.glob("meta_*.json"))
     tokenizer_files = sorted((BASE_DIR / "tokenizer").glob("*"))
