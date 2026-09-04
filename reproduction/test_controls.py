@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Positive and negative controls for the calibration ceiling."""
 
-from calibrate import enforce_projection_ceiling, project_pretrain_seconds
+from reproduction.calibrate import enforce_projection_ceiling, project_pretrain_seconds
 
 
 def main() -> None:
