@@ -20,6 +20,14 @@ import torch.nn.functional as F
 # =============================================================================
 # Detection: Try to load FA3 on CUDA GPUs
 # =============================================================================
+def _kernel_repo_for_compute_major(major):
+    if major == 9:
+        return "varunneal/flash-attention-3"
+    if major == 8:
+        return "kernels-community/flash-attn3"
+    return None
+
+
 def _load_flash_attention_3():
     """Try to load Flash Attention 3."""
     if not torch.cuda.is_available():
@@ -27,16 +35,17 @@ def _load_flash_attention_3():
     try:
         major, _ = torch.cuda.get_device_capability()
         # FA3 kernels are currently compiled for Hopper (sm90), Ada (sm89) and Ampere (sm80/sm86)
-        # Blackwell (sm100) needs SDPA fallback until FA3 is recompiled or FA4 is released
+        # Blackwell (sm100/sm120) needs SDPA fallback until FA3 is recompiled or FA4 is released
         import os
         os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
         from kernels import get_kernel, has_kernel
         # The varunneal kernel obtains better results for H100/Hopper
+        hf_kernel = _kernel_repo_for_compute_major(major)
+        if hf_kernel is None:
+            return None
         if major == 9:
-            hf_kernel = "varunneal/flash-attention-3"
             return get_kernel(hf_kernel).flash_attn_interface
         else:
-            hf_kernel = "kernels-community/flash-attn3"
             if has_kernel(hf_kernel):
                 return get_kernel(hf_kernel).flash_attn_interface
             else:

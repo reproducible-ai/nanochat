@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 import torch
+from nanochat.flash_attention import USE_FA3
 
 
 def main() -> None:
@@ -18,6 +19,8 @@ def main() -> None:
     capability = torch.cuda.get_device_capability(0)
     if capability != (12, 0):
         raise RuntimeError(f"expected compute capability 12.0, found {capability}")
+    if USE_FA3:
+        raise RuntimeError("expected SDPA attention on compute capability 12.0")
     distribution_version = importlib.metadata.version("torch")
     if "+" in distribution_version:
         raise RuntimeError(f"non-portable torch distribution version: {distribution_version}")
@@ -33,6 +36,7 @@ def main() -> None:
         "gpu_count": torch.cuda.device_count(),
         "torch_distribution_version": distribution_version,
         "torch_runtime_cuda": torch.version.cuda,
+        "attention": "sdpa",
     }
     Path("outputs").mkdir(exist_ok=True)
     Path("outputs/hardware.json").write_text(
