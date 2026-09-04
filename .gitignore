@@ -11,3 +11,9 @@ eval_bundle/
 # Local setup
 CLAUDE.md
 wandb/
+
+# Reproduction state and outputs
+.roar/
+!outputs/
+outputs/*
+!outputs/.gitkeep
