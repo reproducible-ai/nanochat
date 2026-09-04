@@ -44,7 +44,7 @@ hardware_check:
     export PATH=/opt/row024-venv/bin:$PATH
 
     export TRACKIO_SPACE_ID=reproducible-ai/experiments PYTHONUNBUFFERED=1
-    roar run -n hardware_check --wandb-to-trackio -- python reproduction/hardware_check.py
+    roar run -n hardware_check --wandb-to-trackio -- python -m reproduction.hardware_check
   trace: off
 
 download_data:
