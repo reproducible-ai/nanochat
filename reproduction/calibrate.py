@@ -15,7 +15,7 @@ from pathlib import Path
 BASE_DIR = Path("outputs/nanochat")
 LOG_PATH = Path("outputs/calibration-depth16.log")
 FULL_ITERATIONS = 3584
-MAX_PROJECTED_PRETRAIN_SECONDS = 4 * 60 * 60
+MAX_PROJECTED_PRETRAIN_SECONDS = 3.5 * 60 * 60
 
 
 def project_pretrain_seconds(step_ms: list[float]) -> float:
